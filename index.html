@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Globing — Compará países</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>🌍 Globing</h1>
+    <p>Explorá el mapa, filtrá países y arrastralos a la zona de comparación para ver población y superficie lado a lado.</p>
+  </header>
+
+  <p id="status" class="status">Cargando datos y mapa…</p>
+
+  <main class="app-layout">
+    <aside class="app-layout__sidebar">
+      <section id="filter-panel" aria-label="Filtros"></section>
+      <section id="country-list" class="app-layout__list" aria-label="Lista de países"></section>
+    </aside>
+
+    <section class="app-layout__map" aria-label="Mapa interactivo">
+      <div id="map-view"></div>
+    </section>
+  </main>
+
+  <section id="compare-zone" class="app-layout__compare" aria-label="Comparador de países"></section>
+
+  <footer class="app-footer">
+    <p>Datos de población y superficie de fuentes públicas (dataset estático). Mapa base: Natural Earth / world-atlas.</p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
