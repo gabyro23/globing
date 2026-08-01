@@ -16,3 +16,11 @@ export function formatArea(km2) {
 export function formatPopulation(people) {
   return `${formatNumber(people)} hab.`;
 }
+
+export function formatAreaCompact(km2) {
+  return `${formatCompact(km2)} km²`;
+}
+
+export function formatPopulationCompact(people) {
+  return `${formatCompact(people)} hab.`;
+}

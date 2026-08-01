@@ -37,7 +37,7 @@ export function createMapView(container, { world, countries, metric, selectedAlp
     .attr('width', width)
     .attr('height', height);
 
-  const tealInterpolator = d3.interpolateRgb('#d7f0ea', '#0f4a44');
+  const tealInterpolator = d3.interpolateRgbBasis(['#dceeee', '#44a1a4', '#224248']);
   let colorScale = () => '#cbd5e1';
   function updateColorScale() {
     const values = countries.map((c) => c[metric]).filter((v) => v != null);

@@ -1,4 +1,4 @@
-import { formatArea, formatPopulation } from '../format.js';
+import { formatArea, formatAreaCompact, formatPopulation, formatPopulationCompact } from '../format.js';
 import { makeDraggable } from '../dnd.js';
 
 export function createCountryCard(country, { selected, onToggle }) {
@@ -15,8 +15,8 @@ export function createCountryCard(country, { selected, onToggle }) {
     <div class="country-card__body">
       <h3 class="country-card__name">${country.name}</h3>
       <dl class="country-card__stats">
-        <div><dt>Población</dt><dd>${formatPopulation(country.population)}</dd></div>
-        <div><dt>Superficie</dt><dd>${formatArea(country.area)}</dd></div>
+        <div><dt>Población</dt><dd title="${formatPopulation(country.population)}">${formatPopulationCompact(country.population)}</dd></div>
+        <div><dt>Superficie</dt><dd title="${formatArea(country.area)}">${formatAreaCompact(country.area)}</dd></div>
       </dl>
     </div>
     <span class="country-card__check" aria-hidden="true">✓</span>

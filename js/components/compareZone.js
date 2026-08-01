@@ -2,7 +2,7 @@ import { formatArea, formatPopulation } from '../format.js';
 import { DND_MIME, makeDraggable } from '../dnd.js';
 
 const MAX_COMPARE = 6;
-const BAR_COLORS = ['#0f766e', '#c2410c', '#6d28d9', '#0369a1', '#b91c1c', '#4d7c0f'];
+const BAR_COLORS = ['#44a1a4', '#ff9a00', '#325e6a', '#224248', '#7fc4c6', '#ffbb52'];
 
 function renderBarGroup(title, unitFormatter, countries) {
   const max = Math.max(...countries.map((c) => c.value), 1);
