@@ -4,8 +4,11 @@ import { createFilterPanel } from './components/filterPanel.js';
 import { createCountryList } from './components/countryList.js';
 import { createMapView } from './components/mapView.js';
 import { createCompareZone } from './components/compareZone.js';
+import { SELECTION_COLORS, MAX_COMPARE } from './selectionColors.js';
 
-const MAX_COMPARE = 6;
+function colorsForSelection(compareAlpha3) {
+  return new Map(compareAlpha3.map((alpha3, index) => [alpha3, SELECTION_COLORS[index]]));
+}
 
 function applyFilters(countries, filters) {
   const term = filters.search.toLowerCase();
@@ -33,7 +36,7 @@ async function main() {
     const regions = [...new Set(countries.map((c) => c.region))].sort();
 
     const store = createStore({
-      filters: { search: '', regions: [...regions], sort: 'name-asc', metric: 'population' },
+      filters: { search: '', regions: [...regions], sort: 'name-asc' },
       compareAlpha3: [],
     });
 
@@ -70,8 +73,7 @@ async function main() {
     const map = createMapView(document.getElementById('map-view'), {
       world,
       countries,
-      metric: store.getState().filters.metric,
-      selectedAlpha3: new Set(store.getState().compareAlpha3),
+      selectionColors: colorsForSelection(store.getState().compareAlpha3),
       onToggleCountry: toggleCompare,
       onDropAlpha3: (event) => {
         const alpha3 = event.dataTransfer.getData('application/x-country-alpha3') || event.dataTransfer.getData('text/plain');
@@ -94,13 +96,14 @@ async function main() {
 
     function render(state) {
       const filtered = applyFilters(countries, state.filters);
-      const selectedAlpha3 = new Set(state.compareAlpha3);
+      const selectionColors = colorsForSelection(state.compareAlpha3);
 
-      countryList.render(filtered, { selectedAlpha3, onToggle: toggleCompare });
-      map.setMetric(state.filters.metric);
-      map.setSelection(selectedAlpha3);
+      countryList.render(filtered, { selectionColors, onToggle: toggleCompare });
+      map.setSelection(selectionColors);
       map.setFilteredAlpha3(new Set(filtered.map((c) => c.alpha3)));
-      compareZone.render(state.compareAlpha3.map((a) => byAlpha3.get(a)).filter(Boolean));
+      compareZone.render(
+        state.compareAlpha3.map((a) => byAlpha3.get(a)).filter(Boolean).map((c) => ({ ...c, color: selectionColors.get(c.alpha3) }))
+      );
     }
 
     store.subscribe(render);

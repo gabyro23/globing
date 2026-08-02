@@ -232,8 +232,8 @@ body {
 }
 
 .country-card.is-selected {
-  border-color: var(--highlight);
-  background: color-mix(in srgb, var(--highlight) 14%, var(--bg));
+  border-color: var(--chip-color, var(--highlight));
+  background: color-mix(in srgb, var(--chip-color, var(--highlight)) 14%, var(--bg));
 }
 
 .country-card__flag {
@@ -288,7 +288,7 @@ body {
 
 .country-card__check {
   opacity: 0;
-  color: var(--highlight);
+  color: var(--chip-color, var(--highlight));
   font-weight: 700;
 }
 
@@ -312,8 +312,8 @@ body {
 }
 
 path.country {
-  stroke: var(--surface);
-  stroke-width: 0.5;
+  stroke: #6b7280;
+  stroke-width: 0.6;
   cursor: pointer;
   transition: opacity 0.15s;
 }
@@ -323,7 +323,6 @@ path.country:hover {
 }
 
 path.country.is-selected {
-  fill: var(--highlight);
   stroke: var(--ink);
   stroke-width: 1.2;
 }
@@ -345,14 +344,6 @@ path.country.is-dimmed {
   max-width: 220px;
 }
 
-.map-legend {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px 14px;
-  font-size: 0.76rem;
-  color: var(--muted);
-}
 
 /* Compare zone */
 .app-layout__compare {
@@ -405,10 +396,18 @@ path.country.is-dimmed {
   gap: 8px;
   padding: 6px 6px 6px 12px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--highlight) 18%, var(--bg));
-  border: 1px solid var(--highlight);
+  background: color-mix(in srgb, var(--chip-color, var(--highlight)) 20%, var(--bg));
+  border: 1px solid var(--chip-color, var(--highlight));
   font-size: 0.86rem;
   cursor: grab;
+}
+
+.compare-chip__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--chip-color, var(--highlight));
+  flex-shrink: 0;
 }
 
 .compare-chip.is-dragging {
@@ -416,11 +415,11 @@ path.country.is-dimmed {
 }
 
 .compare-chip.drop-before {
-  box-shadow: -3px 0 0 var(--highlight);
+  box-shadow: -3px 0 0 var(--chip-color, var(--highlight));
 }
 
 .compare-chip.drop-after {
-  box-shadow: 3px 0 0 var(--highlight);
+  box-shadow: 3px 0 0 var(--chip-color, var(--highlight));
 }
 
 .compare-chip__remove {

@@ -26,14 +26,6 @@ export function createFilterPanel(container, { regions, filters, onChange }) {
         </select>
       </div>
 
-      <div class="filter-field">
-        <label for="filter-metric">Métrica en el mapa</label>
-        <select id="filter-metric">
-          <option value="population">Población</option>
-          <option value="area">Superficie</option>
-        </select>
-      </div>
-
       <button type="button" class="filter-reset" id="filter-reset">Limpiar filtros</button>
     </div>
   `;
@@ -41,7 +33,6 @@ export function createFilterPanel(container, { regions, filters, onChange }) {
   const searchInput = container.querySelector('#filter-search');
   const regionsBox = container.querySelector('#filter-regions');
   const sortSelect = container.querySelector('#filter-sort');
-  const metricSelect = container.querySelector('#filter-metric');
   const resetButton = container.querySelector('#filter-reset');
 
   regionsBox.innerHTML = regions
@@ -56,7 +47,6 @@ export function createFilterPanel(container, { regions, filters, onChange }) {
 
   searchInput.value = filters.search;
   sortSelect.value = filters.sort;
-  metricSelect.value = filters.metric;
 
   let searchDebounce;
   searchInput.addEventListener('input', () => {
@@ -70,7 +60,6 @@ export function createFilterPanel(container, { regions, filters, onChange }) {
   });
 
   sortSelect.addEventListener('change', () => onChange({ sort: sortSelect.value }));
-  metricSelect.addEventListener('change', () => onChange({ metric: metricSelect.value }));
 
   resetButton.addEventListener('click', () => {
     searchInput.value = '';

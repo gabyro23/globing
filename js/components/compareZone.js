@@ -1,18 +1,16 @@
 import { formatArea, formatPopulation } from '../format.js';
 import { DND_MIME, makeDraggable } from '../dnd.js';
-
-const MAX_COMPARE = 6;
-const BAR_COLORS = ['#44a1a4', '#ff9a00', '#325e6a', '#224248', '#7fc4c6', '#ffbb52'];
+import { MAX_COMPARE } from '../selectionColors.js';
 
 function renderBarGroup(title, unitFormatter, countries) {
   const max = Math.max(...countries.map((c) => c.value), 1);
   const rows = countries
     .map(
-      (c, i) => `
+      (c) => `
       <div class="compare-bar-row">
         <span class="compare-bar-row__label">${c.flag} ${c.name}</span>
         <div class="compare-bar-row__track">
-          <div class="compare-bar-row__fill" style="width:${(c.value / max) * 100}%; background:${BAR_COLORS[i % BAR_COLORS.length]}"></div>
+          <div class="compare-bar-row__fill" style="width:${(c.value / max) * 100}%; background:${c.color}"></div>
         </div>
         <span class="compare-bar-row__value">${unitFormatter(c.value)}</span>
       </div>`
@@ -60,7 +58,9 @@ export function createCompareZone(container, { onDropAlpha3, onRemove, onReorder
       const chip = document.createElement('div');
       chip.className = 'compare-chip';
       chip.dataset.alpha3 = country.alpha3;
+      chip.style.setProperty('--chip-color', country.color);
       chip.innerHTML = `
+        <span class="compare-chip__swatch" aria-hidden="true"></span>
         <span>${country.flag} ${country.name}</span>
         <button type="button" class="compare-chip__remove" aria-label="Quitar ${country.name}">×</button>
       `;
@@ -92,8 +92,8 @@ export function createCompareZone(container, { onDropAlpha3, onRemove, onReorder
       return;
     }
 
-    const population = selectedCountries.map((c) => ({ flag: c.flag, name: c.name, value: c.population }));
-    const area = selectedCountries.map((c) => ({ flag: c.flag, name: c.name, value: c.area }));
+    const population = selectedCountries.map((c) => ({ flag: c.flag, name: c.name, value: c.population, color: c.color }));
+    const area = selectedCountries.map((c) => ({ flag: c.flag, name: c.name, value: c.area, color: c.color }));
 
     chartsEl.innerHTML =
       renderBarGroup('Población', formatPopulation, [...population].sort((a, b) => b.value - a.value)) +

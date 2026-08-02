@@ -2,9 +2,9 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import * as topojson from 'https://cdn.jsdelivr.net/npm/topojson-client@3/+esm';
 import { formatArea, formatPopulation } from '../format.js';
 
-const METRIC_LABEL = { population: 'Población', area: 'Superficie' };
+const BASE_FILL = '#f5f5dc';
 
-export function createMapView(container, { world, countries, metric, selectedAlpha3, onToggleCountry, onDropAlpha3 }) {
+export function createMapView(container, { world, countries, selectionColors, onToggleCountry, onDropAlpha3 }) {
   const normalizeId = (id) => String(Number(id));
   const byId = new Map(countries.map((c) => [normalizeId(c.id), c]));
   const land = topojson.feature(world, world.objects.countries).features.filter((f) => byId.has(normalizeId(f.id)));
@@ -37,21 +37,13 @@ export function createMapView(container, { world, countries, metric, selectedAlp
     .attr('width', width)
     .attr('height', height);
 
-  const tealInterpolator = d3.interpolateRgbBasis(['#dceeee', '#44a1a4', '#224248']);
-  let colorScale = () => '#cbd5e1';
-  function updateColorScale() {
-    const values = countries.map((c) => c[metric]).filter((v) => v != null);
-    colorScale = d3.scaleSequentialLog(tealInterpolator).domain([d3.min(values), d3.max(values)]);
-  }
-  updateColorScale();
-
   const countryPaths = zoomLayer
     .selectAll('path.country')
     .data(land, (d) => d.id)
     .join('path')
     .attr('class', 'country')
     .attr('d', path)
-    .attr('fill', (d) => colorScale(countryOf(d)[metric] ?? 0))
+    .attr('fill', BASE_FILL)
     .attr('tabindex', 0)
     .attr('role', 'button')
     .attr('aria-label', (d) => countryOf(d).name)
@@ -74,7 +66,12 @@ export function createMapView(container, { world, countries, metric, selectedAlp
     .on('mouseleave', () => tooltip.attr('hidden', true));
 
   function refreshSelection() {
-    countryPaths.classed('is-selected', (d) => selectedAlpha3.has(countryOf(d).alpha3));
+    countryPaths.each(function (d) {
+      const color = selectionColors.get(countryOf(d).alpha3) ?? null;
+      d3.select(this)
+        .classed('is-selected', !!color)
+        .style('fill', color);
+    });
   }
   refreshSelection();
 
@@ -94,30 +91,9 @@ export function createMapView(container, { world, countries, metric, selectedAlp
     onDropAlpha3?.(event);
   });
 
-  const legend = wrapper.append('div').attr('class', 'map-legend');
-  legend.append('span').attr('class', 'map-legend__label').text(`${METRIC_LABEL[metric]} (escala logarítmica)`);
-  const gradientId = 'map-legend-gradient';
-  const legendSvg = legend.append('svg').attr('width', 160).attr('height', 14);
-  const defs = legendSvg.append('defs');
-  const gradient = defs.append('linearGradient').attr('id', gradientId);
-  gradient
-    .selectAll('stop')
-    .data(d3.range(0, 1.01, 0.1))
-    .join('stop')
-    .attr('offset', (d) => `${d * 100}%`)
-    .attr('stop-color', (d) => tealInterpolator(d));
-  legendSvg.append('rect').attr('width', 160).attr('height', 14).attr('fill', `url(#${gradientId})`).attr('rx', 3);
-  legend.append('span').attr('class', 'map-legend__hint').text('menor → mayor');
-
   return {
-    setMetric(nextMetric) {
-      metric = nextMetric;
-      updateColorScale();
-      countryPaths.transition().duration(300).attr('fill', (d) => colorScale(countryOf(d)[metric] ?? 0));
-      legend.select('.map-legend__label').text(`${METRIC_LABEL[metric]} (escala logarítmica)`);
-    },
-    setSelection(nextSelected) {
-      selectedAlpha3 = nextSelected;
+    setSelection(nextSelectionColors) {
+      selectionColors = nextSelectionColors;
       refreshSelection();
     },
     setFilteredAlpha3(alpha3Set) {
