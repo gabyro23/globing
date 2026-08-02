@@ -315,12 +315,18 @@ path.country {
   stroke: #6b7280;
   stroke-width: 0.6;
   cursor: pointer;
+  outline: none;
   filter: drop-shadow(0 1px 1.5px rgba(34, 66, 72, 0.25));
   transition: opacity 0.15s, filter 0.2s;
 }
 
 path.country:hover {
   filter: drop-shadow(0 1px 1.5px rgba(34, 66, 72, 0.25)) brightness(1.08);
+}
+
+path.country:focus-visible {
+  stroke: var(--ink);
+  stroke-width: 1.4;
 }
 
 path.country.is-selected {
