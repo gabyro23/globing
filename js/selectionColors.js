@@ -1,4 +1,11 @@
-// Order-based color assigned to each country as it's added to the comparison,
-// shared by the map fill, the compare chips and the bar charts.
-export const SELECTION_COLORS = ['#00E0BA', '#91008D', '#FF3483', '#FFCF00', '#39B1D1'];
-export const MAX_COMPARE = SELECTION_COLORS.length;
+// Base palette for the map mosaic. Each country keeps this color everywhere
+// it appears (map, list cards, compare chips, bar charts) — selecting a
+// country never recolors it, it just gets highlighted (see mapView.js).
+export const MAP_BASE_COLORS = ['#C1666B', '#48A9A6', '#6FB7B3', '#96C4C0', '#DCCAAF', '#D4B483', '#CB8D77', '#C67A71'];
+export const MAX_COMPARE = 5;
+
+export function assignCountryColors(countries) {
+  countries.forEach((country, index) => {
+    country.color = MAP_BASE_COLORS[index % MAP_BASE_COLORS.length];
+  });
+}

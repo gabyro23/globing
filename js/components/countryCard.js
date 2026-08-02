@@ -1,15 +1,15 @@
 import { formatArea, formatAreaCompact, formatPopulation, formatPopulationCompact } from '../format.js';
 import { makeDraggable } from '../dnd.js';
 
-export function createCountryCard(country, { color, onToggle }) {
+export function createCountryCard(country, { selected, onToggle }) {
   const card = document.createElement('article');
-  card.className = 'country-card' + (color ? ' is-selected' : '');
+  card.className = 'country-card' + (selected ? ' is-selected' : '');
   card.dataset.alpha3 = country.alpha3;
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
-  card.setAttribute('aria-pressed', String(!!color));
+  card.setAttribute('aria-pressed', String(!!selected));
   card.title = 'Arrastrá a "Comparar" o hacé click para agregar';
-  if (color) card.style.setProperty('--chip-color', color);
+  card.style.setProperty('--chip-color', country.color);
 
   card.innerHTML = `
     <span class="country-card__flag" aria-hidden="true">${country.flag}</span>

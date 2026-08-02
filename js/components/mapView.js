@@ -2,9 +2,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import * as topojson from 'https://cdn.jsdelivr.net/npm/topojson-client@3/+esm';
 import { formatArea, formatPopulation } from '../format.js';
 
-const BASE_FILL = '#f5f5dc';
-
-export function createMapView(container, { world, countries, selectionColors, onToggleCountry, onDropAlpha3 }) {
+export function createMapView(container, { world, countries, selectedAlpha3, onToggleCountry, onDropAlpha3 }) {
   const normalizeId = (id) => String(Number(id));
   const byId = new Map(countries.map((c) => [normalizeId(c.id), c]));
   const land = topojson.feature(world, world.objects.countries).features.filter((f) => byId.has(normalizeId(f.id)));
@@ -43,7 +41,7 @@ export function createMapView(container, { world, countries, selectionColors, on
     .join('path')
     .attr('class', 'country')
     .attr('d', path)
-    .attr('fill', BASE_FILL)
+    .attr('fill', (d) => countryOf(d).color)
     .attr('tabindex', 0)
     .attr('role', 'button')
     .attr('aria-label', (d) => countryOf(d).name)
@@ -66,12 +64,8 @@ export function createMapView(container, { world, countries, selectionColors, on
     .on('mouseleave', () => tooltip.attr('hidden', true));
 
   function refreshSelection() {
-    countryPaths.each(function (d) {
-      const color = selectionColors.get(countryOf(d).alpha3) ?? null;
-      d3.select(this)
-        .classed('is-selected', !!color)
-        .style('fill', color);
-    });
+    wrapper.classed('has-selection', selectedAlpha3.size > 0);
+    countryPaths.classed('is-selected', (d) => selectedAlpha3.has(countryOf(d).alpha3));
   }
   refreshSelection();
 
@@ -92,8 +86,8 @@ export function createMapView(container, { world, countries, selectionColors, on
   });
 
   return {
-    setSelection(nextSelectionColors) {
-      selectionColors = nextSelectionColors;
+    setSelection(nextSelectedAlpha3) {
+      selectedAlpha3 = nextSelectedAlpha3;
       refreshSelection();
     },
     setFilteredAlpha3(alpha3Set) {
