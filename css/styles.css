@@ -1,5 +1,5 @@
 :root {
-  --bg: #f2f6f6;
+  --bg: #f2f4f4;
   --surface: #ffffff;
   --ink: #224248;
   --muted: #325e6a;
@@ -41,19 +41,75 @@ body {
   color: var(--ink);
 }
 
-.app-header {
-  padding: 24px clamp(16px, 4vw, 40px) 8px;
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 22px clamp(16px, 4vw, 40px) 0;
 }
 
-.app-header h1 {
-  margin: 0 0 4px;
-  font-size: 1.6rem;
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.app-header p {
-  margin: 0;
+.site-header__logo {
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+.site-header__wordmark {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.site-header__nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.site-header__nav a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.site-header__nav a.site-header__cta {
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 18px;
+}
+
+.site-header__nav a.site-header__cta:hover {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+
+.app-header__tagline {
+  margin: 12px clamp(16px, 4vw, 40px) 0;
   color: var(--muted);
-  max-width: 60ch;
+  max-width: 58ch;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
 }
 
 .status {
@@ -107,9 +163,7 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  align-self: start;
 }
 
 /* Filter panel */
@@ -161,16 +215,19 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
   font-size: 0.82rem;
   cursor: pointer;
   user-select: none;
 }
 
 .filter-region-chip input {
-  accent-color: var(--accent);
+  accent-color: #96c4c0;
+}
+
+.filter-region-chip:has(input:checked) {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg));
 }
 
 .filter-reset {

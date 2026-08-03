@@ -7,10 +7,18 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="app-header">
-    <h1>🌍 Globing</h1>
-    <p>Explorá el mapa, filtrá países y arrastralos a la zona de comparación para ver población y superficie lado a lado.</p>
+  <header class="site-header">
+    <a class="site-header__brand" href="#" aria-label="Globeing — inicio">
+      <img class="site-header__logo" src="assets/logo.png" alt="Globeing" />
+    </a>
+    <nav class="site-header__nav" aria-label="Navegación principal">
+      <a href="#about">About us</a>
+      <a href="#contact">Contact</a>
+      <a href="#" class="site-header__cta">Download</a>
+    </nav>
   </header>
+
+  <p class="app-header__tagline">Explore the map, filter countries, and drag your picks into the comparison panel to see population and land area side by side.</p>
 
   <p id="status" class="status">Cargando datos y mapa…</p>
 

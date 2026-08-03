@@ -5,6 +5,9 @@ import { createCountryList } from './components/countryList.js';
 import { createMapView } from './components/mapView.js';
 import { createCompareZone } from './components/compareZone.js';
 import { MAX_COMPARE, assignCountryColors } from './selectionColors.js';
+import { initSiteHeader } from './components/siteHeader.js';
+
+initSiteHeader();
 
 function applyFilters(countries, filters) {
   const term = filters.search.toLowerCase();
